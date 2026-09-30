@@ -34,32 +34,25 @@ Closer to Basecamp: Projects, Message Board, To-do Lists, Subtasks, Inbox, Menti
 - Stale / overdue detection
 - Email + inbox reminders via cron
 
-## Setup (Windows)
+## Getting started
 
-```cmd
-cd task-followup
-npm install --legacy-peer-deps
-copy .env.example .env
-notepad .env
+Accounts are managed by Netlify Identity. There are no pre-made demo logins.
+
+1. Open the site and choose **Create an account**.
+2. Confirm your email using the link Netlify sends you, then sign in.
+   To skip confirmation, enable **Autoconfirm** under Project configuration > Identity.
+3. The first person to sign in becomes the **Admin**. After that, new people join as Employees.
+   Admins can change roles on the People page, or add people ahead of time with a role and an optional temporary password.
+
+To stop strangers from signing up, set Identity registration to **Invite only** in the Netlify UI.
+
+## Local development
+
+```bash
+npm install
+netlify dev
 ```
 
-Set:
-```
-DATABASE_URL="file:./dev.db"
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="k8xP2mR9vL4qW7nJ3tY6bH1cF5sA0dG8eU4iO2zX9"
-```
+Data lives in Netlify Database (Postgres, via Drizzle ORM, schema in `db/schema.ts`). Migrations in `netlify/database/migrations/` are applied automatically on deploy.
 
-Then:
-```cmd
-npx prisma db push
-npm run db:seed
-npm run dev
-```
-
-Open http://localhost:3000
-
-### Logins (password: password123)
-- admin@company.com (Admin)
-- manager@company.com (Manager)
-- john@company.com / jane@company.com (Employee)
+Email reminders need the `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, and `SMTP_FROM` environment variables. Without them, reminders only go to the in-app inbox.
